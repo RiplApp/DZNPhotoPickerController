@@ -33,7 +33,7 @@ static DZNPhotoPickerControllerCancellationBlock _cancellationBlock;
         self.allowsEditing = NO;
         self.enablePhotoDownload = YES;
         self.allowAutoCompletedSearch = YES;
-        
+
         self.supportedServices = DZNPhotoPickerControllerService500px | DZNPhotoPickerControllerServiceFlickr;
         self.supportedLicenses = DZNPhotoPickerControllerCCLicenseBY_ALL;
         self.cropMode = DZNPhotoEditorViewControllerCropModeSquare;
@@ -47,7 +47,7 @@ static DZNPhotoPickerControllerCancellationBlock _cancellationBlock;
 - (void)loadView
 {
     [super loadView];
-    
+
     self.view.backgroundColor = [UIColor whiteColor];
 }
 
@@ -57,7 +57,7 @@ static DZNPhotoPickerControllerCancellationBlock _cancellationBlock;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishPickingPhoto:) name:DZNPhotoPickerDidFinishPickingNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFailPickingPhoto:) name:DZNPhotoPickerDidFailPickingNotification object:nil];
-    
+
     if (!self.isEditModeEnabled) {
         [self showPhotoDisplayController];
     }
@@ -66,7 +66,7 @@ static DZNPhotoPickerControllerCancellationBlock _cancellationBlock;
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
+
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -92,14 +92,14 @@ static DZNPhotoPickerControllerCancellationBlock _cancellationBlock;
     if (mode != DZNPhotoEditorViewControllerCropModeNone) {
         _allowsEditing = YES;
     }
-    
+
     _cropMode = mode;
 }
 
 - (void)setCropSize:(CGSize)size
 {
     NSAssert(!CGSizeEqualToSize(size, CGSizeZero), @"'cropSize' cannot be zero.");
-    
+
     self.cropMode = DZNPhotoEditorViewControllerCropModeCustom;
     _cropSize = size;
 }
@@ -121,15 +121,13 @@ static DZNPhotoPickerControllerCancellationBlock _cancellationBlock;
 - (void)showPhotoDisplayController
 {
     [self setViewControllers:@[]];
-    
+
     DZNPhotoDisplayViewController *controller = [[DZNPhotoDisplayViewController alloc] initWithPreferredContentSize:self.view.frame.size];
     if (self.title) controller.title = self.title;
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil) style:UIBarButtonItemStylePlain target:self action:@selector(cancelPicker:)];
-        [controller.navigationItem setRightBarButtonItem:cancel];
-    }
-    
+
+    UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil) style:UIBarButtonItemStylePlain target:self action:@selector(cancelPicker:)];
+    [controller.navigationItem setRightBarButtonItem:cancel];
+
     [self setViewControllers:@[controller]];
 }
 
@@ -162,9 +160,9 @@ static DZNPhotoPickerControllerCancellationBlock _cancellationBlock;
     if ([controller respondsToSelector:@selector(stopLoadingRequest)]) {
         [controller stopLoadingRequest];
     }
-    
+
     [controller.searchController.searchBar resignFirstResponder];
-    
+
     if (self.cancellationBlock) {
         self.cancellationBlock(self);
     }
